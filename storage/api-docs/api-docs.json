@@ -1,0 +1,568 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "KeluargaKas API",
+        "description": "API Backend untuk aplikasi manajemen keuangan keluarga KeluargaKas. Dibangun dengan Laravel 13 + Supabase PostgreSQL.",
+        "contact": {
+            "email": "dev@keluargakas.app"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Local Development Server"
+        }
+    ],
+    "paths": {
+        "/api/admin/trash": {
+            "get": {
+                "tags": [
+                    "Admin - Trash"
+                ],
+                "summary": "Lihat semua data yang ter-soft delete (admin only)",
+                "operationId": "5d1207b11c27ce48c76c2d5cf419ed4b",
+                "responses": {
+                    "200": {
+                        "description": "Data trash berhasil diambil"
+                    },
+                    "403": {
+                        "description": "Akses ditolak, bukan admin"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/trash/transactions/{id}/restore": {
+            "post": {
+                "tags": [
+                    "Admin - Trash"
+                ],
+                "summary": "Pulihkan transaksi yang ter-soft delete",
+                "operationId": "43fd4af7e2d73d7d1a25334cd195123c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaksi berhasil dipulihkan"
+                    },
+                    "403": {
+                        "description": "Akses ditolak"
+                    },
+                    "404": {
+                        "description": "Data tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/trash/debts/{id}/restore": {
+            "post": {
+                "tags": [
+                    "Admin - Trash"
+                ],
+                "summary": "Pulihkan hutang yang ter-soft delete",
+                "operationId": "9101f96fe03441df3126b5caf849a3c0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hutang berhasil dipulihkan"
+                    },
+                    "403": {
+                        "description": "Akses ditolak"
+                    },
+                    "404": {
+                        "description": "Data tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/trash/transactions/{id}": {
+            "delete": {
+                "tags": [
+                    "Admin - Trash"
+                ],
+                "summary": "Hapus permanen transaksi beserta file kuitansi dari Supabase",
+                "operationId": "360178b6a7843d6b5415613ada1843d0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaksi berhasil dihapus permanen"
+                    },
+                    "403": {
+                        "description": "Akses ditolak"
+                    },
+                    "404": {
+                        "description": "Data tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/admin/trash/debts/{id}": {
+            "delete": {
+                "tags": [
+                    "Admin - Trash"
+                ],
+                "summary": "Hapus permanen hutang",
+                "operationId": "e0c64f170c8a0624eb583723c8445844",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hutang berhasil dihapus permanen"
+                    },
+                    "403": {
+                        "description": "Akses ditolak"
+                    },
+                    "404": {
+                        "description": "Data tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/debts": {
+            "get": {
+                "tags": [
+                    "Debts"
+                ],
+                "summary": "Daftar semua hutang milik user yang sedang login",
+                "operationId": "db02cf9efab46d2448020de570b6b6b3",
+                "responses": {
+                    "200": {
+                        "description": "Daftar hutang berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/DebtResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Tidak terautentikasi"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Debts"
+                ],
+                "summary": "Tambah hutang baru",
+                "operationId": "500be8eb81582c5ff82fa5991dd6a9ee",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "source",
+                                    "monthly_cost",
+                                    "monthly_deadline",
+                                    "total_tenor"
+                                ],
+                                "properties": {
+                                    "source": {
+                                        "type": "string",
+                                        "example": "KPR Bank BCA"
+                                    },
+                                    "monthly_cost": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 2500000
+                                    },
+                                    "monthly_deadline": {
+                                        "type": "integer",
+                                        "example": 15
+                                    },
+                                    "total_tenor": {
+                                        "type": "integer",
+                                        "example": 120
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Hutang berhasil disimpan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    },
+                    "401": {
+                        "description": "Tidak terautentikasi"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/debts/{id}": {
+            "delete": {
+                "tags": [
+                    "Debts"
+                ],
+                "summary": "Hapus hutang (soft delete)",
+                "operationId": "f84f16bf8eaf35bced9b27b1c18232d4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hutang berhasil dihapus"
+                    },
+                    "403": {
+                        "description": "Akses ditolak / IDOR terdeteksi"
+                    },
+                    "401": {
+                        "description": "Tidak terautentikasi"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/transactions": {
+            "get": {
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Daftar semua transaksi milik user yang sedang login",
+                "operationId": "9b50e29e364179ebde24ac5fc59cd442",
+                "responses": {
+                    "200": {
+                        "description": "Daftar transaksi berhasil diambil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/TransactionResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Tidak terautentikasi"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Simpan transaksi baru (mendukung upload kuitansi)",
+                "operationId": "54eaa3952808f639d46f969f4c8b98c5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "type",
+                                    "amount",
+                                    "category",
+                                    "date"
+                                ],
+                                "properties": {
+                                    "debt_id": {
+                                        "type": "integer",
+                                        "example": 1,
+                                        "nullable": true
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "out",
+                                        "enum": [
+                                            "in",
+                                            "out"
+                                        ]
+                                    },
+                                    "amount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 500000
+                                    },
+                                    "category": {
+                                        "type": "string",
+                                        "example": "Cicilan KPR"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-01-15"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "receipt": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Transaksi berhasil disimpan"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    },
+                    "403": {
+                        "description": "Akses ditolak / IDOR terdeteksi"
+                    },
+                    "401": {
+                        "description": "Tidak terautentikasi"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/transactions/{id}": {
+            "delete": {
+                "tags": [
+                    "Transactions"
+                ],
+                "summary": "Hapus transaksi (soft delete)",
+                "operationId": "bc63b06ba9e12cac8ef887c638602dd5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaksi berhasil dihapus"
+                    },
+                    "403": {
+                        "description": "Akses ditolak / IDOR terdeteksi"
+                    },
+                    "401": {
+                        "description": "Tidak terautentikasi"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "DebtResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "source": {
+                        "type": "string",
+                        "example": "KPR Bank BCA"
+                    },
+                    "monthly_cost": {
+                        "type": "number",
+                        "example": 2500000
+                    },
+                    "monthly_deadline": {
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "total_tenor": {
+                        "type": "integer",
+                        "example": 120
+                    },
+                    "total_paid": {
+                        "type": "number",
+                        "example": 5000000
+                    },
+                    "remaining": {
+                        "type": "number",
+                        "example": 295000000
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "TransactionResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "out",
+                        "enum": [
+                            "in",
+                            "out"
+                        ]
+                    },
+                    "amount": {
+                        "type": "number",
+                        "example": 500000
+                    },
+                    "category": {
+                        "type": "string",
+                        "example": "Cicilan KPR"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2025-01-15"
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "receipt_url": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "sanctum": {
+                "type": "http",
+                "description": "Masukkan token Sanctum yang diperoleh dari endpoint login.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Admin - Trash",
+            "description": "Manajemen data terhapus (khusus admin)"
+        },
+        {
+            "name": "Debts",
+            "description": "Manajemen data hutang pengguna"
+        },
+        {
+            "name": "Transactions",
+            "description": "Manajemen transaksi keuangan keluarga"
+        }
+    ]
+}

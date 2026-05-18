@@ -1,0 +1,62 @@
+# ── Environment & Secrets ──────────────────────────────────────────────────────
+.env
+.env.backup
+.env.production
+.env.staging
+*.key
+
+# ── Dependencies ────────────────────────────────────────────────────────────────
+/vendor
+/node_modules
+
+# ── Laravel Generated Files ─────────────────────────────────────────────────────
+/bootstrap/cache/*.php
+/public/build
+/public/hot
+/public/fonts-manifest.dev.json
+
+# ── Storage (user uploads & generated files) ───────────────────────────────────
+# Simpan struktur folder, tapi abaikan isinya (kecuali .gitkeep)
+/storage/app/public/*
+!/storage/app/public/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitkeep
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
+/storage/framework/views/*
+!/storage/framework/views/.gitkeep
+/storage/pail
+/storage/*.key
+
+# ── Symlink (dibuat ulang dengan php artisan storage:link) ─────────────────────
+/public/storage
+
+# ── Testing ────────────────────────────────────────────────────────────────────
+/.phpunit.cache
+/.phpunit.result.cache
+/coverage
+
+# ── IDE & OS Files ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.log
+.phpactor.json
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+# ── Editor & Tool Configs (personal preference, tidak perlu di-share) ──────────
+/.idea
+/.vscode
+/.nova
+/.zed
+/.cursor/
+/.codex
+
+# ── Misc Laravel ───────────────────────────────────────────────────────────────
+/auth.json
+Homestead.json
+Homestead.yaml
+.npmrc
