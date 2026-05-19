@@ -35,9 +35,15 @@ class CategoryController extends Controller
             new OA\Response(response: 401, description: 'Tidak terautentikasi'),
         ]
     )]
-    public function index(): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+    #[OA\QueryParameter(
+        name: 'type',
+        in: 'query',
+        required: false,
+        schema: new OA\Schema(type: 'string')
+    )]
+    public function index(Request $request)
     {
-        return CategoryResource::collection($this->categoryService->getCategoriesForUser());
+        return CategoryResource::collection($this->categoryService->getCategories($request));
     }
 
     #[OA\Post(
@@ -53,7 +59,7 @@ class CategoryController extends Controller
                     required: ['name', 'type'],
                     properties: [
                         new OA\Property(property: 'name', type: 'string', example: 'Gaji'),
-                        new OA\Property(property: 'type', type: 'string', enum: ['income', 'expense'], example: 'income'),
+                        new OA\Property(property: 'type', type: 'string', enum: ['in', 'out'], example: 'income'),
                         new OA\Property(property: 'icon', type: 'string', example: 'mdi-cash-register'),
                         new OA\Property(property: 'color', type: 'string', example: '#FFD700'),
                     ]

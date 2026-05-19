@@ -324,6 +324,9 @@
         <a href="{{ route('admin.users.index') }}" class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
             <span class="icon">👥</span> {{ __('admin.user_management') }}
         </a>
+        <a href="{{ route('admin.category.index') }}" class="nav-item {{ request()->routeIs('admin.category.*') ? 'active' : '' }}">
+            <span class="icon">🏷️</span> {{ __('admin.category') }}
+        </a>
 
         <div class="nav-section-label" style="margin-top:16px">{{ __('admin.data') }}</div>
         <a href="{{ route('admin.trash.index') }}" class="nav-item {{ request()->routeIs('admin.trash.*') ? 'active' : '' }}">

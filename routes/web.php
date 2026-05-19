@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminTrashWebController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Middleware\EnsureAdminForWeb;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,16 @@ Route::prefix('admin')->name('admin.')->middleware([SetLocale::class])->group(fu
             Route::post('/debts/{id}/restore', [AdminTrashWebController::class, 'restoreDebt'])->name('debts.restore');
             Route::delete('/transactions/{id}', [AdminTrashWebController::class, 'forceDeleteTransaction'])->name('transactions.force-delete');
             Route::delete('/debts/{id}', [AdminTrashWebController::class, 'forceDeleteDebt'])->name('debts.force-delete');
+        });
+
+        // Category Management
+        Route::prefix('category')->name('category.')->group(function() {
+            Route::get('/', [AdminCategoryController::class, 'index'])->name('index');
+            Route::get('/create', [AdminCategoryController::class, 'create'])->name('create');
+            Route::post('/', [AdminCategoryController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [AdminCategoryController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [AdminCategoryController::class, 'update'])->name('update');
+            Route::delete('/{id}', [AdminCategoryController::class, 'destroy'])->name('destroy');
         });
     });
 });

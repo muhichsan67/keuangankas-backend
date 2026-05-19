@@ -4,6 +4,7 @@ namespace App\Http\Requests\Category;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCategoryRequest extends FormRequest {
     public function authorize(): bool {
@@ -13,7 +14,7 @@ class UpdateCategoryRequest extends FormRequest {
     public function rules(): array {
         return [
             'name'                  => ['required', 'string', 'max:255'],
-            'type'                  => ['required', Rule::in(['income', 'expense'])],
+            'type'                  => ['required', Rule::in(['in', 'out'])],
             'icon'                  => ['nullable', 'string', 'max:255'],
             'color'                 => ['nullable', 'string', 'max:255'],
         ];
@@ -22,7 +23,7 @@ class UpdateCategoryRequest extends FormRequest {
     public function messages(): array {
         return [
             'name.required'     => 'Nama wajib diisi.',
-            'type.in'           => 'Jenis harus income atau expense.',
+            'type.in'           => 'Jenis harus in atau out.',
         ];
     }
 }

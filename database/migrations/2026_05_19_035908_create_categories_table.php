@@ -13,7 +13,7 @@ return new class extends Migration
             $blueprint->foreignId('user_id')->constrained()->cascadeOnDelete();
             $blueprint->string('name');
             // Untuk membedakan kategori pemasukan atau pengeluaran
-            $blueprint->enum('type', ['income', 'expense'])->default('expense');
+            $blueprint->enum('type', ['in', 'out'])->default('out');
             $blueprint->string('icon')->nullable(); // Opsional untuk UI Vue
             $blueprint->string('color')->nullable(); // Opsional untuk UI Vue
             $blueprint->timestamps();

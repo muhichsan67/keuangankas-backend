@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\TrashController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DebtController;
 use App\Http\Controllers\Api\TransactionController;
+
 use App\Http\Middleware\EnsureUserIsAdmin;
 use Illuminate\Support\Facades\Route;
 

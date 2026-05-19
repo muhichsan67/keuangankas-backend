@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Category;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -33,9 +34,14 @@ class CategoryService
         return Category::where('user_id', Auth::id())->findOrFail($id);
     }
 
-    public function getAllCategories(): \Illuminate\Database\Eloquent\Collection
+    public function getCategories(Request $request): \Illuminate\Database\Eloquent\Collection
     {
-        return Category::select('id', 'name', 'type', 'icon', 'color')->orderBy('name', 'asc')->get();
+        $query = Category::select('id', 'name', 'type', 'icon', 'color');
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        return $query->orderBy('name', 'asc')->get();
     }
 
     public function updateCategory(int $id, array $data): Category

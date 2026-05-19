@@ -26,7 +26,7 @@ class StoreTransactionRequest extends FormRequest
             ],
             'type'        => ['required', Rule::in(['in', 'out'])],
             'amount'      => ['required', 'numeric', 'gt:0'],
-            'category'    => ['required', 'string', 'max:255'],
+            'category'    => ['required', 'exists:categories,id'],
             'date'        => ['required', 'date'],
             'description' => ['nullable', 'string'],
             'receipt'     => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
@@ -37,12 +37,13 @@ class StoreTransactionRequest extends FormRequest
     {
         return [
             'debt_id.exists'    => 'Hutang tidak ditemukan atau bukan milik Anda.',
-            'type.in'           => 'Tipe transaksi harus "in" (pemasukan) atau "out" (pengeluaran).',
+            'type.in'           => 'Tipe transaksi harus in atau out.',
             'amount.gt'         => 'Nominal transaksi harus lebih dari 0.',
             'date.required'     => 'Tanggal transaksi wajib diisi.',
             'receipt.image'     => 'File kuitansi harus berupa gambar.',
             'receipt.mimes'     => 'Format kuitansi yang diizinkan: jpeg, png, jpg, webp.',
             'receipt.max'       => 'Ukuran kuitansi maksimal 5MB.',
+            'category.exists'   => 'Kategori tidak ditemukan.',
         ];
     }
 }
