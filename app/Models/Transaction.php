@@ -39,4 +39,8 @@ class Transaction extends Model
     {
         return $this->belongsTo(Debt::class);
     }
+
+    public function category(): BelongsTo {
+        return $this->belongsTo(Category::class);
+    }
 }

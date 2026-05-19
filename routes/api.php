@@ -43,6 +43,15 @@ Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
         Route::delete('/{id}', [TransactionController::class, 'destroy']);
     });
 
+    // === Category Routes ===
+    Route::prefix('categories')->group(function () {
+        Route::get('/', [CategoryController::class, 'index']);
+        Route::post('/', [CategoryController::class, 'store']);
+        Route::get('/{id}', [CategoryController::class, 'show']);
+        Route::put('/{id}', [CategoryController::class, 'update']);
+        Route::delete('/{id}', [CategoryController::class, 'destroy']);
+    });
+
     // === Admin Routes (role = admin only) ===
     Route::prefix('admin')->middleware(EnsureUserIsAdmin::class)->group(function () {
         Route::get('/trash', [TrashController::class, 'index']);
